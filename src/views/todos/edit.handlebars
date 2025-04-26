@@ -1,0 +1,17 @@
+<div class="form">
+    <h2>Edit Task</h2>
+    <form action="/todos/{{todo.id}}" method="POST" class="todo-form">
+        <div class="form-group">
+            <input type="text" 
+                   name="text" 
+                   value="{{todo.text}}" 
+                   class="form__input" 
+                   required>
+            <input type="hidden" name="completed" value="{{todo.completed}}">
+        </div>
+        <div class="form-actions">
+            <button type="submit" class="form__button">Save Changes</button>
+            <a href="/todos" class="cancel-btn">Cancel</a>
+        </div>
+    </form>
+</div> 

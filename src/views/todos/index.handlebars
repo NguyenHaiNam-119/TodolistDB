@@ -1,0 +1,58 @@
+<div class="todo-container">
+    <header class="todo-header">
+        <h2>Welcome, {{username}}!</h2>
+        <a href="/auth/logout" class="logout-btn">Logout</a>
+    </header>
+
+    <form action="/todos" method="POST" class="todo-form">
+        <div class="form-group">
+            <input type="text" 
+                   name="text" 
+                   placeholder="What needs to be done?" 
+                   class="form__input" 
+                   required>
+            <button type="submit" class="form__button">Add Task</button>
+        </div>
+    </form>
+
+    <div class="todo-list">
+        {{#if todos.length}}
+            {{#each todos}}
+            <div class="todo-item {{#if completed}}completed{{/if}}" data-id="{{id}}">
+                <div class="todo-content">
+                    <form action="/todos/{{id}}" method="POST" class="todo-toggle">
+                        <input type="hidden" name="text" value="{{text}}">
+                        <input type="hidden" name="completed" value="{{#if completed}}false{{else}}true{{/if}}">
+                        <input type="checkbox" 
+                               onChange="this.form.submit()" 
+                               {{#if completed}}checked{{/if}}>
+                        <span class="todo-text">{{text}}</span>
+                    </form>
+                </div>
+                <div class="todo-actions">
+                    <a href="/todos/{{id}}/edit" class="edit-btn">Edit</a>
+                    <button onclick="showDeleteConfirmation({{id}})" class="delete-btn">Delete</button>
+                </div>
+            </div>
+            {{/each}}
+        {{else}}
+            <p class="no-todos">No tasks yet. Add one above!</p>
+        {{/if}}
+    </div>
+</div>
+
+{{> delete-modal}}
+
+<script>
+function showDeleteConfirmation(todoId) {
+    const modal = document.getElementById('deleteModal');
+    const deleteForm = document.getElementById('deleteForm');
+    deleteForm.action = `/todos/${todoId}/delete`;
+    modal.classList.add('show');
+}
+
+function hideDeleteConfirmation() {
+    const modal = document.getElementById('deleteModal');
+    modal.classList.remove('show');
+}
+</script> 

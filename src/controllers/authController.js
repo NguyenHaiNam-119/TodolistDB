@@ -1,4 +1,3 @@
-const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const { PrismaClient } = require('@prisma/client');
 const prisma = new PrismaClient();
@@ -23,7 +22,7 @@ exports.login = async (req, res) => {
     }
 
     console.log('User found, verifying password...');
-    const validPassword = await bcrypt.compare(password, user.password);
+    const validPassword = password === user.password;
     
     if (!validPassword) {
       console.log('Invalid password for user:', username);
@@ -82,13 +81,11 @@ exports.register = async (req, res) => {
         username: username 
       });
     }
-
-    const hashedPassword = await bcrypt.hash(password, 10);
     
     await prisma.user.create({
       data: {
         username,
-        password: hashedPassword
+        password: password
       }
     });
 
